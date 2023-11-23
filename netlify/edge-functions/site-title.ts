@@ -1,19 +1,23 @@
+const jsonResponse = <T extends {}>(json: T, statusCode = 200) =>
+  new Response(JSON.stringify(json), {
+    status: statusCode,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
+
 export default async (request: Request) => {
-  const inboundUrl = new URL(request.url)
-  const outboundUrl = inboundUrl.searchParams.get('url')
+  const inboundUrl = new URL(request.url);
+  const outboundUrl = inboundUrl.searchParams.get("url");
   if (outboundUrl === null) {
-    throw new Error('expected request parameter named "url"')
+    const res = { error: "missing request parameter: url" };
+    return jsonResponse(res, 400);
   }
 
-  const res = {
-    value: `hello world -- ${outboundUrl}`
-  }
-  return new Response(JSON.stringify(res), {
-  status: 200,
-  headers: {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-  }
-});}
+  return jsonResponse({
+    value: `hello world -- ${outboundUrl}`,
+  });
+};
 
 export const config = { path: "/site-title" };
