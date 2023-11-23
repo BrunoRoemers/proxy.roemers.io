@@ -1,6 +1,12 @@
-export default () => {
+export default async (request: Request) => {
+  const inboundUrl = new URL(request.url)
+  const outboundUrl = inboundUrl.searchParams.get('url')
+  if (outboundUrl === null) {
+    throw new Error('expected request parameter named "url"')
+  }
+
   const res = {
-    value: "hello world"
+    value: `hello world -- ${outboundUrl}`
   }
   return new Response(JSON.stringify(res), {
   status: 200,
