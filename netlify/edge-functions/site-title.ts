@@ -29,11 +29,10 @@ export default async (request: Request) => {
 
     const siteRes = await fetch(rawOutboundUrl);
     const siteHtml = await siteRes.text();
-    console.log(siteRes);
-    console.log(siteHtml);
+    const siteTitle = (siteHtml.match(/<title>([\s\S]*?)<\/title>/i) ?? [])[1];
 
     return jsonResponse({
-      value: `hello world -- ${rawOutboundUrl}`,
+      value: siteTitle,
     });
   } catch (e) {
     if (e instanceof HttpError) {
