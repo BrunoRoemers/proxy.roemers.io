@@ -36,11 +36,10 @@ export default async (request: Request) => {
     }
 
     const siteHtml = await siteRes.text();
-    console.log(siteHtml);
-    const siteTitle = (siteHtml.match(/<title>([\s\S]*?)<\/title>/i) ?? [])[1];
+    const siteTitle = (siteHtml.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i) ?? [])[1];
 
     return jsonResponse({
-      value: siteTitle,
+      value: siteTitle ?? "",
     });
   } catch (e) {
     if (e instanceof HttpError) {
