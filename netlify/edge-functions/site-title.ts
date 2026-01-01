@@ -28,6 +28,13 @@ export default async (request: Request) => {
     }
 
     const siteRes = await fetch(rawOutboundUrl);
+    if (siteRes.status !== 200) {
+      return jsonResponse(
+        { error: `failed to fetch site: ${siteRes.status}` },
+        siteRes.status
+      );
+    }
+
     const siteHtml = await siteRes.text();
     const siteTitle = (siteHtml.match(/<title>([\s\S]*?)<\/title>/i) ?? [])[1];
 
